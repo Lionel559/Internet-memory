@@ -25,7 +25,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   };
 
   try {
-    const response = await fetch("http://localhost:3000/api/memories", {
+    const response = await fetch("https://internet-memory-phi.vercel.app/api/memories", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
