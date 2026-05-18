@@ -221,6 +221,77 @@ export default function Home() {
             </motion.div>
           </div>
         </section>
+         {/* Features */}
+<motion.section
+  variants={fadeUp}
+  initial="hidden"
+  whileInView="show"
+  viewport={{ once: true }}
+  id="features"
+  className="px-6 py-24"
+>
+  <div className="mx-auto max-w-7xl">
+    <div className="mb-14 max-w-2xl">
+      <p className="mb-3 text-sm font-medium uppercase tracking-[0.18em] text-blue-600">
+        Features
+      </p>
+
+      <h2 className="text-4xl font-semibold tracking-tight md:text-5xl">
+        Everything your browser history should have been.
+      </h2>
+
+      <p className="mt-5 text-lg leading-8 text-slate-500">
+        Internet Memory turns browsing into an organized, searchable, AI-powered memory system.
+      </p>
+    </div>
+
+    <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {[
+        {
+          title: "Auto-save browsing",
+          text: "The Chrome extension captures useful pages while you browse.",
+        },
+        {
+          title: "AI summaries",
+          text: "Each memory gets a short summary so you know why it was saved.",
+        },
+        {
+          title: "Smart categories",
+          text: "Websites are grouped into AI, Video, Design, Development, Articles, and more.",
+        },
+        {
+          title: "Semantic search",
+          text: "Search by meaning instead of trying to remember exact page titles.",
+        },
+        {
+          title: "Favorites",
+          text: "Star important memories and quickly filter them later.",
+        },
+        {
+          title: "Privacy controls",
+          text: "Pause tracking or manually save pages when you want more control.",
+        },
+      ].map((feature) => (
+        <div
+          key={feature.title}
+          className="rounded-[28px] border border-slate-200 bg-white p-7 shadow-[0_20px_60px_rgba(15,23,42,0.04)]"
+        >
+          <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+            <Sparkles size={22} />
+          </div>
+
+          <h3 className="mb-3 text-xl font-semibold">
+            {feature.title}
+          </h3>
+
+          <p className="leading-7 text-slate-500">
+            {feature.text}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</motion.section>
 
         {/* How It Works */}
         <motion.section
