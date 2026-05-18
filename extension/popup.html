@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Internet Memory</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+
+  <body>
+    <div class="popup">
+      <div class="header">
+        <div>
+          <h1>Internet<span>Memory</span></h1>
+          <p>AI browser memory</p>
+        </div>
+
+        <div class="status-dot"></div>
+      </div>
+
+      <div class="card">
+        <p class="label">Current Page</p>
+        <h2 id="pageTitle">Loading page...</h2>
+        <p id="pageUrl">Getting URL...</p>
+      </div>
+
+      <div class="stats">
+        <div>
+          <p class="label">Saved</p>
+          <h3 id="memoryCount">0</h3>
+        </div>
+
+        <div>
+          <p class="label">Status</p>
+          <h3>Active</h3>
+        </div>
+      </div>
+
+      <button id="saveBtn">Save Current Page</button>
+      <button id="dashboardBtn" class="secondary">Open Dashboard</button>
+
+      <p class="footer-text">
+        Your browsing memory is saved locally for now.
+      </p>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
