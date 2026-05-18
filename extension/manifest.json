@@ -3,18 +3,22 @@
   "name": "Internet Memory",
   "version": "1.0.0",
   "description": "Save and search your browsing memory with AI.",
-  "permissions": ["tabs", "storage", "scripting"],
+  "permissions": ["tabs", "storage"],
   "host_permissions": [
-    "<all_urls>",
+    "https://internet-memory-phi.vercel.app/*",
     "http://localhost:3000/*"
   ],
   "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
   "action": {
     "default_popup": "popup.html",
     "default_title": "Internet Memory",
     "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
       "128": "icons/icon128.png"
     }
   },

@@ -15,7 +15,7 @@
           <p>AI browser memory</p>
         </div>
 
-        <div class="status-dot"></div>
+        <div id="statusDot" class="status-dot"></div>
       </div>
 
       <div class="card">
@@ -26,21 +26,22 @@
 
       <div class="stats">
         <div>
-          <p class="label">Saved</p>
-          <h3 id="memoryCount">0</h3>
+          <p class="label">Mode</p>
+          <h3 id="trackingStatus">Active</h3>
         </div>
 
         <div>
-          <p class="label">Status</p>
-          <h3>Active</h3>
+          <p class="label">Save Type</p>
+          <h3>Cloud</h3>
         </div>
       </div>
 
       <button id="saveBtn">Save Current Page</button>
+      <button id="pauseBtn" class="secondary">Pause Tracking</button>
       <button id="dashboardBtn" class="secondary">Open Dashboard</button>
 
       <p class="footer-text">
-        Your browsing memory is saved locally for now.
+        Memories are saved securely to your Internet Memory dashboard.
       </p>
     </div>
 

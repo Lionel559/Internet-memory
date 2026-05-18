@@ -1,64 +1,86 @@
+const APP_URL = "https://internet-memory-phi.vercel.app";
+
+const saveBtn = document.getElementById("saveBtn");
+const pauseBtn = document.getElementById("pauseBtn");
+const dashboardBtn = document.getElementById("dashboardBtn");
+const pageTitle = document.getElementById("pageTitle");
+const pageUrl = document.getElementById("pageUrl");
+const trackingStatus = document.getElementById("trackingStatus");
+const statusDot = document.getElementById("statusDot");
+
+function updateTrackingUI(paused) {
+  trackingStatus.textContent = paused ? "Paused" : "Active";
+  pauseBtn.textContent = paused ? "Resume Tracking" : "Pause Tracking";
+
+  if (paused) {
+    statusDot.style.background = "#f59e0b";
+  } else {
+    statusDot.style.background = "#22c55e";
+  }
+}
+
 chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
   const tab = tabs[0];
 
-  document.getElementById("pageTitle").textContent =
-    tab.title || "Untitled Page";
-
-  document.getElementById("pageUrl").textContent = tab.url || "No URL found";
+  pageTitle.textContent = tab?.title || "Untitled Page";
+  pageUrl.textContent = tab?.url || "No URL found";
 });
 
-const saveBtn = document.getElementById("saveBtn");
-const dashboardBtn = document.getElementById("dashboardBtn");
+chrome.runtime.sendMessage(
+  {
+    type: "GET_TRACKING_STATUS",
+  },
+  (response) => {
+    updateTrackingUI(response?.paused === true);
+  }
+);
 
-saveBtn.addEventListener("click", async () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
-    const tab = tabs[0];
+saveBtn.addEventListener("click", () => {
+  saveBtn.disabled = true;
+  saveBtn.textContent = "Saving...";
 
-    const memory = {
-  title: tab.title,
-  url: tab.url,
-  favicon: tab.favIconUrl || "",
-  savedAt: new Date().toISOString(),
-};
+  chrome.runtime.sendMessage(
+    {
+      type: "SAVE_CURRENT_TAB",
+    },
+    (response) => {
+      if (response?.success) {
+        saveBtn.textContent = "Saved to Dashboard";
+      } else {
+        saveBtn.textContent = "Save Failed";
+      }
 
-    chrome.storage.local.get(["memories"], async (result) => {
-      const memories = result.memories || [];
+      setTimeout(() => {
+        saveBtn.disabled = false;
+        saveBtn.textContent = "Save Current Page";
+      }, 2000);
+    }
+  );
+});
 
-      memories.unshift(memory);
+pauseBtn.addEventListener("click", () => {
+  chrome.runtime.sendMessage(
+    {
+      type: "GET_TRACKING_STATUS",
+    },
+    (statusResponse) => {
+      const nextPaused = !(statusResponse?.paused === true);
 
-      chrome.storage.local.set({ memories }, async () => {
-        document.getElementById("memoryCount").textContent = memories.length;
-
-        try {
-          await fetch("http://localhost:3000/api/memories", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(memory),
-          });
-
-          saveBtn.textContent = "Saved to Dashboard";
-        } catch (error) {
-          saveBtn.textContent = "Saved Locally";
+      chrome.runtime.sendMessage(
+        {
+          type: "SET_TRACKING_PAUSED",
+          paused: nextPaused,
+        },
+        (response) => {
+          updateTrackingUI(response?.paused === true);
         }
-
-        setTimeout(() => {
-          saveBtn.textContent = "Save Current Page";
-        }, 2000);
-      });
-    });
-  });
+      );
+    }
+  );
 });
 
 dashboardBtn.addEventListener("click", () => {
   chrome.tabs.create({
-    url: "http://localhost:3000/dashboard",
+    url: `${APP_URL}/dashboard`,
   });
-});
-
-chrome.storage.local.get(["memories"], (result) => {
-  const memories = result.memories || [];
-
-  document.getElementById("memoryCount").textContent = memories.length;
 });
