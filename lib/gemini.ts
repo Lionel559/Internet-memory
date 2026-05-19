@@ -1,25 +1,33 @@
-export async function generateMemorySummary(title: string, url: string) {
+export async function generateMemorySummary(
+  title: string,
+  url: string
+) {
   try {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      "https://api.groq.com/openai/v1/chat/completions",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
         },
         body: JSON.stringify({
-          contents: [
+          model: "llama-3.1-8b-instant",
+          messages: [
             {
-              parts: [
-                {
-                  text: `Write a short useful summary under 25 words for this saved browser memory.
+              role: "system",
+              content:
+                "You create short smart summaries for saved websites.",
+            },
+            {
+              role: "user",
+              content: `Summarize this website in under 20 words.
 
 Title: ${title}
 URL: ${url}`,
-                },
-              ],
             },
           ],
+          temperature: 0.4,
         }),
       }
     );
@@ -27,16 +35,18 @@ URL: ${url}`,
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("GEMINI SUMMARY ERROR:", data);
-      return `Saved memory from ${title}`;
+      console.error("GROQ ERROR:", data);
+
+      return `${title} is a saved web memory for quick recall and search.`;
     }
 
     return (
-      data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ||
-      `Saved memory from ${title}`
+      data.choices?.[0]?.message?.content?.trim() ||
+      `${title} is a saved web memory for quick recall and search.`
     );
   } catch (error) {
-    console.error("Gemini summary error:", error);
-    return `Saved memory from ${title}`;
+    console.error("Groq summary error:", error);
+
+    return `${title} is a saved web memory for quick recall and search.`;
   }
 }
